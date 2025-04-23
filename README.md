@@ -17,32 +17,30 @@ ChefCook — это веб-приложение для ресторанов и �
 ```bash
 git clone https://github.com/yourusername/chefcook.git
 cd chefcook
+
+
 2. Создайте виртуальное окружение (рекомендуется)
 bash
-Копировать
-Редактировать
 python -m venv venv
 venv\Scripts\activate     # Windows
 # source venv/bin/activate   # macOS / Linux
+
+
 3. Установите зависимости
 bash
-Копировать
-Редактировать
 pip install -r requirements.txt
+
+
 4. Настройте базу данных PostgreSQL
 Создайте базу и пользователя:
 
 sql
-Копировать
-Редактировать
 CREATE DATABASE chef_cook_db;
 CREATE USER chefuser WITH PASSWORD 'password';
 GRANT ALL PRIVILEGES ON DATABASE chef_cook_db TO chefuser;
 Обновите settings.py:
 
 python
-Копировать
-Редактировать
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -53,21 +51,21 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
 5. Примените миграции
 bash
-Копировать
-Редактировать
 python manage.py makemigrations
 python manage.py migrate
+
+
 6. Создайте администратора
 bash
-Копировать
-Редактировать
 python manage.py createsuperuser
+
+
 7. Запустите сервер
 bash
-Копировать
-Редактировать
 python manage.py runserver
 Откройте: http://127.0.0.1:8000/
 
@@ -84,9 +82,8 @@ Bootstrap 5
 
 Установите с помощью:
 
+
 bash
-Копировать
-Редактировать
 pip install -r requirements.txt
 📲 Уведомления Telegram
 Создайте бота через @BotFather
@@ -96,8 +93,6 @@ pip install -r requirements.txt
 Используйте команду:
 
 bash
-Копировать
-Редактировать
 python manage.py send_telegram
 🛠️ Авторы и разработка
 Проект разрабатывается в рамках учебной и практической деятельности.
