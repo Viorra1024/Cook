@@ -20,14 +20,14 @@ cd chefcook
 
 
 2. Создайте виртуальное окружение (рекомендуется)
-bash
+```bash
 python -m venv venv
 venv\Scripts\activate     # Windows
 # source venv/bin/activate   # macOS / Linux
 
 
 3. Установите зависимости
-bash
+```bash
 pip install -r requirements.txt
 
 
@@ -54,18 +54,18 @@ DATABASES = {
 
 
 5. Примените миграции
-bash
+```bash
 python manage.py makemigrations
 python manage.py migrate
 
 
 6. Создайте администратора
-bash
+```bash
 python manage.py createsuperuser
 
 
 7. Запустите сервер
-bash
+```bash
 python manage.py runserver
 Откройте: http://127.0.0.1:8000/
 
@@ -83,7 +83,7 @@ Bootstrap 5
 Установите с помощью:
 
 
-bash
+```bash
 pip install -r requirements.txt
 📲 Уведомления Telegram
 Создайте бота через @BotFather
@@ -92,7 +92,7 @@ pip install -r requirements.txt
 
 Используйте команду:
 
-bash
+```bash
 python manage.py send_telegram
 🛠️ Авторы и разработка
 Проект разрабатывается в рамках учебной и практической деятельности.
