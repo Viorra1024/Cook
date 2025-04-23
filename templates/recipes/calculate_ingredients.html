@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📊 Расчет ингредиентов для меню</h2>
+
+{% if error %}
+<p class="alert alert-warning">{{ error }}</p>
+<a href="{% url 'menu' %}" class="btn btn-secondary">🔙 Назад в меню</a>
+{% else %}
+
+{% if low_stock_items %}
+<div class="alert alert-danger">
+    <h4>🚨 Недостаточно ингредиентов! Заказ создан у поставщика.</h4>
+    <p>Проверить статус можно в <a href="{% url 'supplier_orders_list' %}">разделе заказов</a>.</p>
+</div>
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ингредиент</th>
+            <th>Требуемое количество</th>
+            <th>Доступно на складе</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ingredient, details in required_ingredients.items %}
+        <tr>
+            <td>{{ ingredient }}</td>
+            <td>{{ details.quantity_needed }} {{ details.unit }}</td>
+            <td>{{ details.quantity_available }} {{ details.unit }}</td>
+            <td>
+                {% if details.quantity_needed > details.quantity_available %}
+                    <span class="badge bg-danger">Недостаточно</span>
+                {% else %}
+                    <span class="badge bg-success">Достаточно</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'menu' %}" class="btn btn-secondary">🔙 Назад в меню</a>
+{% endif %}
+{% endblock %}

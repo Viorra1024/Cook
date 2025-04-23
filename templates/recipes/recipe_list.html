@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Список рецептов</h2>
+<a href="{% url 'recipe_create' %}" class="btn btn-primary mb-3">Добавить рецепт</a>
+
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.name }}</h5>
+                <p class="card-text">{{ recipe.description }}</p>
+                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">Подробнее</a>
+                <a href="{% url 'recipe_edit' recipe.id %}" class="btn btn-warning">Редактировать</a>
+                <a href="{% url 'recipe_delete' recipe.id %}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

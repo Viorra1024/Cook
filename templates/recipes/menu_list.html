@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-6">
+
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">📅 Меню на день / неделю</h2>
+
+    <!-- Кнопка расчёта ингредиентов -->
+    <a href="{% url 'calculate_ingredients' %}" class="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded shadow mb-6">
+        Рассчитать ингредиенты
+    </a>
+
+    <!-- Выбранные рецепты -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+        <h3 class="text-xl font-semibold text-gray-700">📌 Выбранные рецепты:</h3>
+
+        {% if menu.recipes.all %}
+        <table class="w-full text-left mt-3 border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-sm font-semibold text-gray-600 uppercase">
+                    <th class="px-4 py-2">Название</th>
+                    <th class="px-4 py-2">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in menu.recipes.all %}
+                <tr class="border-b">
+                    <td class="px-4 py-2 font-medium">{{ recipe.name }}</td>
+                    <td class="px-4 py-2 flex gap-2">
+                        <a href="{% url 'remove_from_menu' recipe.id %}"
+                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow text-sm">
+                            Удалить
+                        </a>
+                        <form method="post" action="{% url 'cook_recipe' menu.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow text-sm">
+                                Приготовить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-gray-500 mt-2">⚠️ В меню пока нет рецептов.</p>
+        {% endif %}
+    </div>
+
+    <!-- Список доступных рецептов для добавления -->
+    <div class="bg-white rounded-lg shadow-md p-4">
+        <h3 class="text-xl font-semibold text-gray-700">🍽️ Выберите рецепт для добавления:</h3>
+
+        <table class="w-full text-left mt-3 border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-sm font-semibold text-gray-600 uppercase">
+                    <th class="px-4 py-2">Название</th>
+                    <th class="px-4 py-2">Ингредиенты</th>
+                    <th class="px-4 py-2">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in recipes %}
+                <tr class="border-b">
+                    <td class="px-4 py-2 font-medium">{{ recipe.name }}</td>
+                    <td class="px-4 py-2">
+                        <ul class="list-disc list-inside text-sm text-gray-600">
+                            {% for recipe_ingredient in recipe.recipeingredient_set.all %}
+                            <li>{{ recipe_ingredient.ingredient.name }} - {{ recipe_ingredient.quantity }} {{ recipe_ingredient.ingredient.unit }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="px-4 py-2">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
+                                ➕ Добавить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Кнопка назад -->
+    <div class="mt-6">
+        <a href="{% url 'recipe_list' %}"
+            class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded shadow">
+            ⬅ Назад к рецептам
+        </a>
+    </div>
+</div>
+{% endblock %}

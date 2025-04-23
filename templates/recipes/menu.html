@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Меню на день / неделю</h2>
+
+<!-- Кнопка расчета ингредиентов -->
+<a href="{% url 'calculate_ingredients' %}" class="btn btn-warning mb-3">Рассчитать ингредиенты</a>
+
+<!-- Выбранные рецепты -->
+<h4>📌 Выбранные рецепты:</h4>
+{% if menu.recipes.all %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Удалить</th>
+            <th>Приготовить</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recipe in menu.recipes.all %}
+        <tr>
+            <td>{{ recipe.name }}</td>
+            <td>
+                <a href="{% url 'remove_from_menu' recipe.id %}" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+            <td>
+                <form method="post" action="{% url 'cook_recipe_from_menu' menu.id recipe.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm">Приготовить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>⚠️ В меню пока нет рецептов.</p>
+{% endif %}
+
+<!-- Таблица с возможностью добавить рецепты -->
+<h4>🍽️ Выберите рецепт для добавления:</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Ингредиенты</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recipe in recipes %}
+        <tr>
+            <td>{{ recipe.name }}</td>
+            <td>
+                <ul>
+                    {% for recipe_ingredient in recipe.recipeingredient_set.all %}
+                    <li>{{ recipe_ingredient.ingredient.name }} - {{ recipe_ingredient.quantity }} {{ recipe_ingredient.ingredient.unit }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                    <button type="submit" class="btn btn-primary btn-sm">Добавить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'recipe_list' %}" class="btn btn-secondary">Назад к рецептам</a>
+{% endblock %}

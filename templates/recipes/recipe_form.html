@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Редактировать рецепт{% else %}Добавить рецепт{% endif %}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.name.label_tag }} {{ form.name }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.description.label_tag }} {{ form.description }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.steps.label_tag }} {{ form.steps }}
+    </div>
+
+    <h4>Ингредиенты:</h4>
+    {{ formset.management_form }}
+    <div id="ingredient-container">
+        {% for ingredient_form in formset %}
+            <div class="mb-3 d-flex align-items-center ingredient-form">
+                {{ ingredient_form.id }}
+                {{ ingredient_form.ingredient.label_tag }} {{ ingredient_form.ingredient }}
+                <span class="mx-2">Количество:</span> {{ ingredient_form.quantity }}
+                {{ ingredient_form.DELETE }} <span>Удалить</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-ingredient" class="btn btn-primary">Добавить ингредиент</button>
+
+
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+
+<script>
+    document.getElementById("add-ingredient").addEventListener("click", function () {
+        let container = document.getElementById("ingredient-container");
+        let totalForms = document.getElementById("id_recipeingredient_set-TOTAL_FORMS");
+        let formNum = Number(totalForms.value);
+        let newForm = container.firstElementChild.cloneNode(true);
+
+        // Очищаем значения для нового ингредиента
+        newForm.querySelectorAll("input, select").forEach(input => {
+            if (input.type !== "hidden") {
+                input.value = "";
+            }
+        });
+
+        // Обновляем индексы в name и id
+        newForm.innerHTML = newForm.innerHTML.replace(/-\d+-/g, `-${formNum}-`);
+        container.appendChild(newForm);
+        totalForms.value = formNum + 1;
+    });
+</script>
+
+{% endblock %}

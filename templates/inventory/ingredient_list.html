@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Склад ингредиентов</h2>
+<a href="{% url 'ingredient_create' %}" class="btn btn-primary mb-3">Добавить ингредиент</a>
+<a href="{% url 'auto_order_supplier' %}" class="btn btn-warning mb-3">Автоматический заказ</a>
+<a href="{% url 'confirm_delivery' %}?order_id=5" class="btn btn-success mb-3">Подтвердить поставку</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ingredient in ingredients %}
+        <tr>
+            <td>{{ ingredient.name }} ({{ ingredient.unit }})</td>
+            <td>{{ ingredient.quantity }}</td>
+            <td>
+                <a href="{% url 'ingredient_edit' ingredient.id %}" class="btn btn-warning btn-sm">Редактировать</a>
+                <a href="{% url 'ingredient_delete' ingredient.id %}" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'recipe_list' %}" class="btn btn-secondary">Назад</a>
+{% endblock %}

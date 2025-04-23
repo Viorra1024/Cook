@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📊 Статистика склада</h2>
+
+<!-- Общий запас ингредиентов -->
+<div class="alert alert-info">
+    <h4>Общий запас ингредиентов: {{ total_ingredients|floatformat:2 }}</h4>
+</div>
+
+<!-- Недостающие ингредиенты -->
+<h4>🚨 Недостающие ингредиенты:</h4>
+{% if low_stock_ingredients %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Текущий запас</th>
+            <th>Минимальный порог</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ingredient in low_stock_ingredients %}
+        <tr>
+            <td>{{ ingredient.name }}</td>
+            <td class="text-danger">{{ ingredient.quantity }} {{ ingredient.unit }}</td>
+            <td>{{ ingredient.min_quantity }} {{ ingredient.unit }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>✅ Все ингредиенты в норме.</p>
+{% endif %}
+
+<!-- Заказы поставщикам -->
+<h4>📦 Заказы у поставщиков:</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Поставщик</th>
+            <th>Количество заказов</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in supplier_orders %}
+        <tr>
+            <td>{{ order.supplier_name }}</td>
+            <td>{{ order.order_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'ingredient_list' %}" class="btn btn-secondary">🔙 Назад к складу</a>
+{% endblock %}
